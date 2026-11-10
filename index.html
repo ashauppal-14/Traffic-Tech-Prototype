@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Freight Sales CRM · Clickable Prototype</title>
+<style>
+:root{--blue:#0176D3;--navy:#032D60;--bg:#F3F3F3;--line:#E5E5E5;--ink:#181818;--mut:#5C5C5C;--green:#2E844A;--red:#BA0517;--amber:#DD7A01;--card:#fff}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:13px;color:var(--ink);background:#DEE1E6;display:flex;flex-direction:column}
+/* browser chrome */
+.chrome{background:#DEE1E6;padding:8px 10px 0;flex:none}
+.dots{display:flex;gap:7px;padding:2px 6px 8px}.dots i{width:11px;height:11px;border-radius:50%;display:block}
+.tabs{display:flex;gap:2px;align-items:flex-end;overflow-x:auto}
+.tab{display:flex;align-items:center;gap:8px;padding:8px 14px;min-width:150px;max-width:210px;border-radius:9px 9px 0 0;cursor:pointer;color:#3c4043;font-size:12.5px;white-space:nowrap;position:relative}
+.tab:hover{background:rgba(255,255,255,.55)}
+.tab.on{background:#fff;color:#111;font-weight:600}
+.tab .fav{width:14px;height:14px;border-radius:3px;flex:none}
+.tab .x{margin-left:auto;color:#80868b;font-size:14px}
+.plus{padding:6px 12px;color:#5f6368;font-size:18px}
+.addr{background:#fff;display:flex;align-items:center;gap:12px;padding:7px 12px;border-bottom:1px solid #dadce0}
+.pill{flex:1;background:#F1F3F4;border-radius:18px;padding:6px 14px;color:#3c4043;font-size:12.5px;display:flex;gap:8px;align-items:center;overflow:hidden;white-space:nowrap}
+.share{background:var(--blue);color:#fff;border:0;border-radius:16px;padding:6px 14px;font-weight:600;cursor:pointer;font-size:12px}
+/* app */
+.app{flex:1;overflow:auto;background:var(--bg)}
+.appbar{background:var(--navy);color:#fff;display:flex;align-items:center;gap:14px;padding:0 16px;height:44px;position:sticky;top:0;z-index:5}
+.badge{width:26px;height:26px;border-radius:6px;background:var(--blue);display:grid;place-items:center;font-weight:700;font-size:11px}
+.appname{font-weight:600;font-size:15px}
+.gsearch{margin-left:auto;background:rgba(255,255,255,.15);border-radius:4px;padding:6px 12px;min-width:240px;color:#cfe3f7}
+.me{width:28px;height:28px;border-radius:50%;background:#8E5CC8;display:grid;place-items:center;font-size:11px;font-weight:700}
+.wrap{padding:16px;max-width:1320px;margin:0 auto}
+h2{margin:0 0 4px;font-size:20px}.sub{color:var(--mut);margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.kpi .l{color:var(--mut);font-size:12px}.kpi .v{font-size:24px;font-weight:700;margin-top:2px}.kpi .d{font-size:11.5px;margin-top:2px}
+.good{color:var(--green)}.bad{color:var(--red)}.warn{color:var(--amber)}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:2fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g11{grid-template-columns:1fr 1fr}
+@media(max-width:1000px){.g2,.g3,.g11{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px}
+.card h3{margin:0 0 10px;font-size:14px;display:flex;align-items:center;gap:8px}
+.card h3 .sp{margin-left:auto;font-weight:400;color:var(--mut);font-size:12px}
+.bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+select,input[type=text]{font:inherit;padding:6px 8px;border:1px solid #C9C9C9;border-radius:4px;background:#fff}
+.chip{border:1px solid #C9C9C9;border-radius:14px;padding:4px 11px;cursor:pointer;background:#fff;font-size:12px}
+.chip.on{background:var(--blue);border-color:var(--blue);color:#fff}
+table{border-collapse:collapse;width:100%}
+th{text-align:left;color:var(--mut);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.3px;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th.s{cursor:pointer}
+td{padding:8px;border-bottom:1px solid #F0F0F0;vertical-align:top}
+tr.row{cursor:pointer}tr.row:hover td{background:#F3F9FF}
+.num{text-align:right;white-space:nowrap}
+a.l{color:var(--blue);cursor:pointer;text-decoration:none}a.l:hover{text-decoration:underline}
+.st{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.s-Prospecting{background:#E5E5E5;color:#444}.s-Qualified{background:#DCEBFB;color:#0B5CAB}.s-RFP{background:#EDE3FA;color:#5A1BA9}.s-Quote{background:#FFF0CC;color:#8A5300}.s-Negotiation{background:#FFE0C2;color:#9A4400}.s-Won{background:#D8F0DD;color:#1B6B34}.s-Lost{background:#FADBDB;color:#9B0B0B}
+.s-Active{background:#D8F0DD;color:#1B6B34}.s-At{background:#FFE0C2;color:#9A4400}.s-Inactive{background:#FADBDB;color:#9B0B0B}.s-Prospect{background:#DCEBFB;color:#0B5CAB}
+.flag{color:var(--red);font-weight:600}
+.hb{display:flex;align-items:center;gap:8px;margin:7px 0;font-size:12.5px}.hb .n{width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hb .t{flex:1;background:#EEF1F4;border-radius:4px;height:14px}.hb .t i{display:block;height:100%;border-radius:4px;background:var(--blue)}.hb .v{width:64px;text-align:right;color:var(--mut)}
+.cols{display:flex;gap:10px;align-items:flex-end;height:150px;padding-top:10px}.cols .c{flex:1;text-align:center;font-size:11.5px;color:var(--mut)}.cols .c i{display:block;background:var(--blue);border-radius:4px 4px 0 0;margin:0 auto 4px;width:70%}
+.btn{font:inherit;font-size:12px;font-weight:600;border:1px solid #C9C9C9;background:#fff;color:var(--blue);border-radius:4px;padding:5px 10px;cursor:pointer}
+.btn.p{background:var(--blue);border-color:var(--blue);color:#fff}.btn:hover{filter:brightness(.96)}
+.item{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #F0F0F0}.item:last-child{border:0}
+.item .tx{flex:1}.muted{color:var(--mut);font-size:12px}
+.ic{width:24px;height:24px;border-radius:5px;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}
+.coach{border-left:4px solid var(--amber);background:#FFFAF0;padding:10px 12px;border-radius:4px;margin-bottom:10px}
+.coach b{display:block;margin-bottom:2px}
+.toggle{width:36px;height:20px;border-radius:10px;background:#C9C9C9;position:relative;cursor:pointer;flex:none}.toggle i{position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}.toggle.on{background:var(--green)}.toggle.on i{left:18px}
+.drawer{position:fixed;top:0;right:-440px;width:420px;height:100%;background:#fff;box-shadow:-4px 0 18px rgba(0,0,0,.2);transition:right .2s;z-index:20;padding:18px;overflow:auto}
+.drawer.open{right:0}
+.drawer h3{margin:0 0 4px;font-size:17px}.drawer .row2{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #F0F0F0}
+.x2{float:right;cursor:pointer;font-size:20px;color:var(--mut)}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;place-items:center;z-index:30}.modal-bg.on{display:grid}
+.modal{background:#fff;border-radius:8px;padding:18px;width:420px}.modal label{display:block;margin:8px 0 3px;font-weight:600;font-size:12px}.modal select,.modal input{width:100%}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#032D60;color:#fff;padding:10px 16px;border-radius:6px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:40}.toast.on{opacity:1}
+.teams{border:1px solid #D6D3F0;background:#F6F5FD;border-radius:8px;padding:10px 12px;margin:8px 0}.teams .h{font-weight:700;color:#4B3FA8;font-size:12px;margin-bottom:3px}
+.integ{display:flex;gap:10px;align-items:flex-start}.integ .ic{width:34px;height:34px;font-size:13px}
+.pillc{font-size:11px;font-weight:700;border-radius:10px;padding:2px 8px}
+.foot{text-align:center;color:#8A8A8A;font-size:11px;padding:16px}
+/* Lightning-style overrides */
+body{background:#F3F3F3;font-family:"Salesforce Sans",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#181818}
+.gh{flex:none;height:52px;background:linear-gradient(#fff,#F8FAFC);border-bottom:1px solid #DDDBDA;display:flex;align-items:center;gap:16px;padding:0 14px}
+.gh .badge{width:34px;height:34px;border-radius:50%;background:#1B96FF;color:#fff;font-size:12px}
+.gsrch{flex:0 1 520px;margin:0 auto;background:#fff;border:1px solid #C9C9C9;border-radius:16px;padding:6px 14px;color:#5C5C5C;font-size:13px}
+.gicons{display:flex;align-items:center;gap:10px}
+.gi{width:28px;height:28px;border-radius:50%;border:1px solid #DDDBDA;background:#fff;display:grid;place-items:center;color:#5C5C5C;font-size:13px}
+.gh .share{background:#fff;color:#0176D3;border:1px solid #C9C9C9;border-radius:4px;padding:5px 10px;font-weight:600;font-size:12px}
+.nav{flex:none;display:flex;align-items:stretch;background:#fff;border-bottom:1px solid #DDDBDA;border-top:3px solid #0176D3;box-shadow:0 2px 2px rgba(0,0,0,.08);height:44px;padding-left:6px}
+.launch{display:grid;place-items:center;width:44px;color:#5C5C5C;font-size:9px;letter-spacing:-2px;border-right:1px solid #EEE}
+.nav .appname{display:flex;align-items:center;padding:0 16px;font-size:16px;font-weight:700;color:#181818;border-right:1px solid #EEE}
+.nav .tabs{display:flex;gap:0;overflow-x:auto;align-items:stretch}
+.nav .tab{border-radius:0;min-width:0;max-width:none;padding:0 16px;color:#181818;font-weight:400;font-size:13.5px;align-items:center;border-bottom:3px solid transparent;margin-bottom:-1px}
+.nav .tab:hover{background:#F3F3F3;border-bottom-color:#C9C9C9}
+.nav .tab.on{background:#fff;font-weight:700;border-bottom-color:#0176D3;color:#0B5CAB}
+.chev{font-size:10px;color:#5C5C5C;margin-left:2px}
+.app{background:#F3F3F3}
+.wrap{max-width:none;padding:12px 16px}
+.ph{background:#fff;border:1px solid #DDDBDA;border-radius:4px;box-shadow:0 2px 2px rgba(0,0,0,.08);padding:12px 16px;margin-bottom:12px;display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center}
+.phi{width:40px;height:40px;border-radius:4px;color:#fff;display:grid;place-items:center;font-weight:700;font-size:18px;grid-row:span 2}
+.pht{font-size:12px;color:#5C5C5C}.phn{font-size:20px;font-weight:700;line-height:1.2}
+.phs{grid-column:1/-1;margin-top:8px;color:#5C5C5C;font-size:12.5px}
+.card,.kpi{border:1px solid #DDDBDA;border-radius:4px;box-shadow:0 2px 2px rgba(0,0,0,.08)}
+.card h3{padding-bottom:8px;border-bottom:1px solid #EEE;font-size:14px}
+.kpi{border-top:3px solid #0176D3}
+th{background:#FAFAF9;text-transform:none;letter-spacing:0;font-size:12px;color:#444;border-top:1px solid #E5E5E5}
+td{border-bottom:1px solid #E5E5E5}
+a.l{color:#0B5CAB}
+.btn{border-radius:4px}.btn.p{background:#0176D3}
+.chip{border-radius:4px}
+select,input[type=text]{border-radius:4px;border-color:#C9C9C9}
+.drawer{box-shadow:-2px 0 12px rgba(0,0,0,.25);border-left:1px solid #DDDBDA}
+.toast{background:#2E844A}
+.foot{padding:10px}
+</style>
+</head>
+<body>
+<div class="gh">
+  <div class="badge">NB</div>
+  <div class="gsrch"><span>&#128269;</span> Search accounts, contacts, opportunities…</div>
+  <div class="gicons"><button class="share" id="share">Copy share link</button><span class="gi">&#9733;</span><span class="gi">&#43;</span><span class="gi">?</span><span class="gi">&#9881;</span><span class="gi">&#128276;</span><div class="me">AU</div></div>
+</div>
+<div class="nav">
+  <div class="launch">&#8942;&#8942;&#8942;</div>
+  <div class="appname">Freight Sales</div>
+  <div class="tabs" id="tabs"></div>
+</div>
+<div class="app" id="app">
+  <div class="wrap" id="view"></div>
+  <div class="foot">Clickable prototype · fictional data · not a live Salesforce org</div>
+</div>
+<div class="drawer" id="drawer"></div>
+<div class="modal-bg" id="modalbg"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const money=n=>n>=1e6?"$"+(n/1e6).toFixed(2).replace(/\.?0+$/,"")+"M":"$"+Math.round(n/1e3)+"K";
+const day=o=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+o);return d};
+const fdate=o=>day(o).toLocaleDateString("en-US",{month:"short",day:"numeric"});
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("on");setTimeout(()=>e.classList.remove("on"),2400)}
+function rng(seed){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+/* ---------- fictional data ---------- */
+const OFFICES={Chicago:"Rick Alvarez",Dallas:"Lena Ortiz",Atlanta:"Greg Holloway",Columbus:"Erin Walsh"};
+const REPS=[
+ {n:"Jamie Chen",o:"Chicago",t:34},{n:"Maya Patel",o:"Chicago",t:28},{n:"Tom Briggs",o:"Chicago",t:14},
+ {n:"Carlos Vega",o:"Dallas",t:31},{n:"Priya Nair",o:"Dallas",t:26},{n:"Sam Okafor",o:"Dallas",t:6},
+ {n:"Nina Park",o:"Atlanta",t:24},{n:"Devon Reed",o:"Atlanta",t:8},
+ {n:"Luke Hart",o:"Columbus",t:30},{n:"Zoe Martin",o:"Columbus",t:5}];
+const repOffice=n=>REPS.find(r=>r.n===n).o;
+const ACCTS=[
+ {id:1,n:"Harbor Ridge Foods",type:"Customer",ind:"Food & Beverage",own:"Jamie Chen",last:4,rev:1840000,gp:14.2,ship:212,st:"Active",rfp:48,exp:["Cold-chain lanes","Dedicated fleet pilot"],ct:["Ana Ruiz, Logistics Director","Phil Moss, Procurement"]},
+ {id:2,n:"Summit Steel Works",type:"Customer",ind:"Manufacturing",own:"Maya Patel",last:11,rev:2310000,gp:11.8,ship:160,st:"Active",rfp:120,exp:["Export lanes","Expedited service"],ct:["Karen Boyd, VP Supply Chain"]},
+ {id:3,n:"Prairie Packaging Co",type:"Customer",ind:"Packaging",own:"Tom Briggs",last:37,rev:920000,gp:12.5,ship:88,st:"At risk",rfp:30,exp:["Rate review","Backhaul program"],ct:["Dale Weber, Plant Manager"]},
+ {id:4,n:"Lone Star Building Supply",type:"Customer",ind:"Building Materials",own:"Carlos Vega",last:6,rev:3050000,gp:13.1,ship:305,st:"Active",rfp:75,exp:["Dedicated fleet","LTL consolidation"],ct:["Marta Cruz, Director of Distribution","Ben Ito, Buyer"]},
+ {id:5,n:"Gulf Coast Chemicals",type:"Customer",ind:"Chemicals",own:"Priya Nair",last:22,rev:1470000,gp:15.6,ship:120,st:"Active",rfp:21,exp:["Hazmat lanes","Tank wash services"],ct:["Omar Said, Transportation Manager"]},
+ {id:6,n:"Red River Apparel",type:"Customer",ind:"Retail & Apparel",own:"Sam Okafor",last:58,rev:640000,gp:10.9,ship:41,st:"Inactive",rfp:null,exp:["Win-back offer","Seasonal surge capacity"],ct:["Tess Nolan, Ops Lead"]},
+ {id:7,n:"Peachtree Beverage",type:"Customer",ind:"Food & Beverage",own:"Nina Park",last:9,rev:1960000,gp:13.8,ship:198,st:"Active",rfp:95,exp:["Cold-chain expansion","Seasonal surge"],ct:["Hugo Lang, Supply Chain Manager"]},
+ {id:8,n:"Magnolia Home Goods",type:"Customer",ind:"Retail & Apparel",own:"Devon Reed",last:41,rev:780000,gp:9.7,ship:52,st:"At risk",rfp:40,exp:["Retention plan","White-glove delivery"],ct:["Ivy Shaw, Logistics Coordinator"]},
+ {id:9,n:"Buckeye Auto Parts",type:"Customer",ind:"Automotive",own:"Luke Hart",last:3,rev:2620000,gp:12.2,ship:270,st:"Active",rfp:60,exp:["LTL expansion","Plant shuttles"],ct:["Glen Parks, Director of Logistics","Rae Kim, Planner"]},
+ {id:10,n:"Scioto Paper & Pulp",type:"Customer",ind:"Paper & Pulp",own:"Zoe Martin",last:66,rev:510000,gp:11.1,ship:33,st:"Inactive",rfp:null,exp:["Win-back","Rail-to-truck transload"],ct:["Walt Pryor, Plant Manager"]},
+ {id:11,n:"Great Lakes Plastics",type:"Prospect",ind:"Manufacturing",own:"Jamie Chen",last:8,rev:520000,gp:13,ship:0,st:"Prospect",rfp:null,exp:["New business"],ct:["Cleo Marsh, Operations Director"]},
+ {id:12,n:"Lakeview Medical Supply",type:"Prospect",ind:"Healthcare",own:"Maya Patel",last:33,rev:260000,gp:15.5,ship:0,st:"Prospect",rfp:null,exp:["Temperature-controlled pilot"],ct:["Dr. Eli Frost, Supply Lead"]},
+ {id:13,n:"Alamo Tile & Stone",type:"Prospect",ind:"Building Materials",own:"Carlos Vega",last:12,rev:380000,gp:12,ship:0,st:"Prospect",rfp:null,exp:["Spot program"],ct:["Rosa Vidal, Owner"]},
+ {id:14,n:"Delta Fresh Produce",type:"Prospect",ind:"Food & Beverage",own:"Nina Park",last:45,rev:690000,gp:15.2,ship:0,st:"Prospect",rfp:28,exp:["Produce lanes RFP"],ct:["Hank Rowe, Head of Transportation"]},
+ {id:15,n:"Ohio Valley Lumber",type:"Prospect",ind:"Building Materials",own:"Luke Hart",last:19,rev:470000,gp:11.9,ship:0,st:"Prospect",rfp:null,exp:["Flatbed lanes"],ct:["Joy Banks, Dispatch Manager"]},
+ {id:16,n:"Panhandle Energy Services",type:"Prospect",ind:"Energy",own:"Sam Okafor",last:52,rev:300000,gp:12,ship:0,st:"Prospect",rfp:null,exp:["Oilfield equipment moves"],ct:["Cal Reeves, Fleet Manager"]},
+ {id:17,n:"Sooner Cement Supply",type:"Prospect",ind:"Building Materials",own:"Sam Okafor",last:14,rev:280000,gp:11.5,ship:0,st:"Prospect",rfp:null,exp:["Bulk lanes"],ct:["Nate Gibbs, Buyer"]},
+ {id:18,n:"Capital City Tires",type:"Prospect",ind:"Automotive",own:"Zoe Martin",last:23,rev:240000,gp:10.8,ship:0,st:"Prospect",rfp:null,exp:["Regional distribution"],ct:["Lena Hurt, Operations"]},
+ {id:19,n:"Coastal Textile Group",type:"Prospect",ind:"Retail & Apparel",own:"Devon Reed",last:27,rev:330000,gp:11.2,ship:0,st:"Prospect",rfp:null,exp:["Import drayage"],ct:["Pia Dunn, Logistics Lead"]},
+ {id:20,n:"Rock Island Fasteners",type:"Prospect",ind:"Manufacturing",own:"Tom Briggs",last:16,rev:290000,gp:12.4,ship:0,st:"Prospect",rfp:null,exp:["Expedited program"],ct:["Ross Tully, Plant Manager"]}
+];
+const STAGES=["Prospecting","Qualified","RFP Issued","Quote Submitted","Negotiation","Won","Lost"];
+const PROB={"Prospecting":.1,"Qualified":.25,"RFP Issued":.4,"Quote Submitted":.55,"Negotiation":.75,"Won":1,"Lost":0};
+const sCls=s=>"s-"+({"RFP Issued":"RFP","Quote Submitted":"Quote"}[s]||s);
+const OPPS=[
+ {id:1,n:"Harbor Ridge Cold-Chain Lanes",a:1,own:"Jamie Chen",ty:"RFP",st:"RFP Issued",rev:640000,gp:15,close:34,next:"Submit lane pricing",nd:5,ins:9},
+ {id:2,n:"Summit Steel Flatbed Renewal",a:2,own:"Maya Patel",ty:"Contract",st:"Negotiation",rev:1100000,gp:11.5,close:18,next:"Legal review of terms",nd:3,ins:6},
+ {id:3,n:"Prairie Packaging Rate Review",a:3,own:"Tom Briggs",ty:"Quote",st:"Quote Submitted",rev:310000,gp:12,close:26,next:"Follow up on quote",nd:-4,ins:27},
+ {id:4,n:"Lone Star Dedicated Fleet",a:4,own:"Carlos Vega",ty:"Contract",st:"Qualified",rev:1400000,gp:13.5,close:90,next:"Schedule site visit",nd:8,ins:12},
+ {id:5,n:"Gulf Coast Hazmat Lanes RFP",a:5,own:"Priya Nair",ty:"RFP",st:"RFP Issued",rev:780000,gp:16,close:21,next:"Final RFP response",nd:2,ins:14},
+ {id:6,n:"Peachtree Seasonal Surge",a:7,own:"Nina Park",ty:"Quote",st:"Won",rev:420000,gp:14,close:-6,next:"Kickoff call",nd:1,ins:2},
+ {id:7,n:"Magnolia Retention Plan",a:8,own:"Devon Reed",ty:"Contract",st:"Qualified",rev:350000,gp:10.5,close:45,next:"Executive check-in",nd:-9,ins:31},
+ {id:8,n:"Buckeye LTL Expansion",a:9,own:"Luke Hart",ty:"Quote",st:"Negotiation",rev:900000,gp:12.8,close:14,next:"Counter on accessorials",nd:2,ins:8},
+ {id:9,n:"Great Lakes Plastics New Business",a:11,own:"Jamie Chen",ty:"Contract",st:"Prospecting",rev:520000,gp:13,close:75,next:"Intro meeting",nd:6,ins:10},
+ {id:10,n:"Lakeview Medical Pilot",a:12,own:"Maya Patel",ty:"Quote",st:"Quote Submitted",rev:260000,gp:15.5,close:30,next:"Follow up on quote",nd:-12,ins:33},
+ {id:11,n:"Alamo Tile Spot Program",a:13,own:"Carlos Vega",ty:"Quote",st:"Qualified",rev:380000,gp:12,close:40,next:"Send rate sheet",nd:-2,ins:15},
+ {id:12,n:"Delta Fresh Produce RFP",a:14,own:"Nina Park",ty:"RFP",st:"RFP Issued",rev:690000,gp:15.2,close:28,next:"Clarify RFP specs",nd:-6,ins:25},
+ {id:13,n:"Ohio Valley Lumber Lanes",a:15,own:"Luke Hart",ty:"Contract",st:"Qualified",rev:470000,gp:11.9,close:60,next:"Discovery call",nd:4,ins:7},
+ {id:14,n:"Panhandle Energy Intro",a:16,own:"Sam Okafor",ty:"Quote",st:"Prospecting",rev:300000,gp:12,close:100,next:"Re-engage contact",nd:-15,ins:36},
+ {id:15,n:"Red River Reactivation",a:6,own:"Sam Okafor",ty:"Contract",st:"Qualified",rev:250000,gp:10,close:50,next:"Send win-back offer",nd:-3,ins:20},
+ {id:16,n:"Harbor Ridge Last-Mile Pilot",a:1,own:"Jamie Chen",ty:"Quote",st:"Won",rev:210000,gp:13.6,close:-20,next:"Monthly review",nd:12,ins:20},
+ {id:17,n:"Summit Steel Export Lanes",a:2,own:"Maya Patel",ty:"RFP",st:"Lost",rev:560000,gp:11,close:-15,next:"Loss debrief",nd:7,ins:15},
+ {id:18,n:"Lone Star Winter Surge",a:4,own:"Carlos Vega",ty:"Quote",st:"Won",rev:330000,gp:12.9,close:-30,next:"Capacity check",nd:10,ins:30},
+ {id:19,n:"Gulf Coast Tank Wash",a:5,own:"Priya Nair",ty:"Quote",st:"Lost",rev:180000,gp:14,close:-25,next:"Loss debrief",nd:9,ins:25},
+ {id:20,n:"Buckeye Plant Shuttle",a:9,own:"Luke Hart",ty:"Contract",st:"Won",rev:640000,gp:12.4,close:-45,next:"Quarterly review",nd:30,ins:45},
+ {id:21,n:"Scioto Win-Back",a:10,own:"Zoe Martin",ty:"Quote",st:"Prospecting",rev:220000,gp:10.6,close:80,next:"Call plant manager",nd:-8,ins:28},
+ {id:22,n:"Peachtree Cold-Chain Expansion",a:7,own:"Nina Park",ty:"RFP",st:"Quote Submitted",rev:560000,gp:14.5,close:33,next:"Walk through quote",nd:5,ins:11},
+ {id:23,n:"Capital City Regional Lanes",a:18,own:"Zoe Martin",ty:"Quote",st:"Prospecting",rev:240000,gp:10.8,close:70,next:"Intro call",nd:3,ins:5},
+ {id:24,n:"Coastal Textile Drayage",a:19,own:"Devon Reed",ty:"Quote",st:"Prospecting",rev:330000,gp:11.2,close:85,next:"Request lane data",nd:-5,ins:22}
+];
+const acct=id=>ACCTS.find(a=>a.id===id);
+const isOpen=o=>o.st!=="Won"&&o.st!=="Lost";
+const stalled=o=>isOpen(o)&&o.ins>=21;
+const overdue=o=>isOpen(o)&&o.nd<0;
+/* activities: generated deterministically so each account's last contact matches its data */
+const ACT=[];
+(function(){
+ const r=rng(42),types=["Call","Call","Email","Email","Email","Meeting"];
+ const subj={Call:["Check-in call","Rate discussion","Capacity planning call","Quote follow-up call"],Email:["Sent lane pricing","Follow-up email","Shared service recap","RFP clarification email"],Meeting:["On-site visit","Quarterly business review","Virtual intro meeting"]};
+ const outc=["Positive","Needs follow-up","Left voicemail","Requested quote","Scheduled next step"];
+ REPS.forEach(rep=>{
+   const mine=ACCTS.filter(a=>a.own===rep.n&&a.last<30);let made=0;
+   mine.forEach(a=>{const t=types[Math.floor(r()*types.length)];ACT.push({d:a.last,rep:rep.n,a:a.id,t,s:subj[t][Math.floor(r()*subj[t].length)],o:outc[Math.floor(r()*outc.length)]});made++;});
+   while(made<rep.t&&mine.length){const a=mine[Math.floor(r()*mine.length)];const d=a.last+Math.floor(r()*(30-a.last));const t=types[Math.floor(r()*types.length)];ACT.push({d,rep:rep.n,a:a.id,t,s:subj[t][Math.floor(r()*subj[t].length)],o:outc[Math.floor(r()*outc.length)]});made++;}
+ });
+ ACT.sort((x,y)=>x.d-y.d);
+})();
+const TIC={Call:["#2E844A","C"],Email:["#5C5C5C","E"],Meeting:["#E4437B","M"]};
+
+/* ---------- state ---------- */
+const S={tab:"activity",doneTasks:{},extraTasks:[],act:{office:"All",rep:"All",type:"All"},pipe:{office:"All",stage:"All",sort:"rev"},lead:{scope:"all"},acc:{q:"",f:"All",sel:null},rules:{},log:[],tms:false,tmsAcct:1};
+const TABS=[
+ {k:"activity",t:"Sales Activity",c:"#2E844A",u:"northbound.my.example/lightning/page/activity"},
+ {k:"pipeline",t:"Pipeline",c:"#0176D3",u:"northbound.my.example/lightning/o/Opportunity/list"},
+ {k:"leadership",t:"Leadership",c:"#8E5CC8",u:"northbound.my.example/lightning/o/Dashboard/home"},
+ {k:"accounts",t:"Accounts",c:"#E4437B",u:"northbound.my.example/lightning/o/Account/list"},
+ {k:"automation",t:"Automation",c:"#DD7A01",u:"northbound.my.example/lightning/setup/Flows"}
+];
+function go(k){S.tab=k;history.replaceState(null,"","#"+k);drawChrome();render();$("#app").scrollTop=0}
+function drawChrome(){
+ $("#tabs").innerHTML=TABS.map(t=>`<div class="tab ${t.k===S.tab?"on":""}" data-tab="${t.k}">${t.t}<span class="chev">&#9662;</span></div>`).join("");
+ const t=TABS.find(x=>x.k===S.tab);document.title=t.t+" | Freight Sales";
+}
+/* ---------- views ---------- */
+function repsIn(office){return REPS.filter(r=>office==="All"||r.o===office)}
+function actCount(rep,days){return ACT.filter(a=>a.rep===rep&&a.d<days).length}
+function tasksOverdue(){
+ const t=OPPS.filter(overdue).map(o=>({id:"o"+o.id,txt:o.next,acct:acct(o.a).n,aid:o.a,own:o.own,days:-o.nd,opp:o.n}));
+ return t.concat(S.extraTasks).filter(x=>!S.doneTasks[x.id]);
+}
+function viewActivity(){
+ const f=S.act;const reps=repsIn(f.office);
+ if(f.rep!=="All"&&!reps.find(r=>r.n===f.rep))f.rep="All";
+ const rows=ACT.filter(a=>(f.office==="All"||repOffice(a.rep)===f.office)&&(f.rep==="All"||a.rep===f.rep)&&(f.type==="All"||a.t===f.type));
+ const inScope=new Set(reps.filter(r=>f.rep==="All"||r.n===f.rep).map(r=>r.n));
+ const od=tasksOverdue().filter(x=>inScope.has(x.own));
+ const inactive=ACCTS.filter(a=>a.type==="Prospect"&&a.last>30&&inScope.has(a.own));
+ const week=rows.filter(a=>a.d<7).length;
+ const accsInScope=ACCTS.filter(a=>inScope.has(a.own));
+ const touches=(rows.length/Math.max(1,accsInScope.length)).toFixed(1);
+ const cust=ACCTS.filter(a=>a.type==="Customer"&&inScope.has(a.own));
+ const custAvg=cust.length?(rows.filter(a=>acct(a.a).type==="Customer").length/cust.length).toFixed(1):"0";
+ const pros=ACCTS.filter(a=>a.type==="Prospect"&&inScope.has(a.own));
+ const prosAvg=pros.length?(rows.filter(a=>acct(a.a).type==="Prospect").length/pros.length).toFixed(1):"0";
+ const max=Math.max(1,...reps.map(r=>actCount(r.n,30)));
+ return `<h2>Sales Activity &amp; Accountability</h2><div class="sub">Every call, email and meeting in one place, with overdue follow-ups and quiet prospects surfaced automatically.</div>
+ <div class="bar"><select data-f="act.office"><option>All</option>${Object.keys(OFFICES).map(o=>`<option ${f.office===o?"selected":""}>${o}</option>`).join("")}</select>
+ <select data-f="act.rep"><option>All</option>${reps.map(r=>`<option ${f.rep===r.n?"selected":""}>${r.n}</option>`).join("")}</select>
+ ${["All","Call","Email","Meeting"].map(t=>`<span class="chip ${f.type===t?"on":""}" data-chip="act.type:${t}">${t==="All"?"All types":t+"s"}</span>`).join("")}
+ <span style="margin-left:auto"></span><button class="btn p" data-act="logcall">+ Log activity</button></div>
+ <div class="kpis"><div class="kpi"><div class="l">Activities, last 7 days</div><div class="v">${week}</div></div>
+ <div class="kpi"><div class="l">Activities, last 30 days</div><div class="v">${rows.length}</div></div>
+ <div class="kpi"><div class="l">Touches per customer / prospect (30d)</div><div class="v">${custAvg} / ${prosAvg}</div></div>
+ <div class="kpi"><div class="l">Overdue follow-ups</div><div class="v ${od.length?"bad":""}">${od.length}</div></div>
+ <div class="kpi"><div class="l">Inactive prospects (30+ days)</div><div class="v ${inactive.length?"warn":""}">${inactive.length}</div></div></div>
+ <div class="grid g2"><div class="card"><h3>Recent activity<span class="sp">${rows.length} in last 30 days · showing 25</span></h3>
+ <table><tr><th></th><th>When</th><th>Rep</th><th>Account</th><th>Subject</th><th>Outcome</th></tr>
+ ${rows.slice(0,25).map(a=>`<tr><td><div class="ic" style="background:${TIC[a.t][0]}">${TIC[a.t][1]}</div></td><td>${a.d===0?"Today":a.d===1?"Yesterday":a.d+" days ago"}</td><td>${a.rep}</td><td><a class="l" data-acct="${a.a}">${esc(acct(a.a).n)}</a></td><td>${a.s}</td><td class="muted">${a.o}</td></tr>`).join("")||`<tr><td colspan=6 class="muted">No activity for this filter.</td></tr>`}</table></div>
+ <div><div class="card" style="margin-bottom:14px"><h3>Activity by rep<span class="sp">last 30 days</span></h3>
+ ${reps.map(r=>`<div class="hb"><span class="n">${r.n}</span><span class="t"><i style="width:${actCount(r.n,30)/max*100}%"></i></span><span class="v">${actCount(r.n,30)}</span></div>`).join("")}</div>
+ <div class="card" style="margin-bottom:14px"><h3>Overdue follow-ups<span class="sp">${od.length}</span></h3>
+ ${od.slice(0,8).map(x=>`<div class="item"><div class="tx"><b>${esc(x.txt)}</b><div class="muted"><a class="l" data-acct="${x.aid}">${esc(x.acct)}</a> · ${x.own} · <span class="flag">${x.days} days late</span></div></div><button class="btn" data-done="${x.id}">Complete</button></div>`).join("")||`<div class="muted">All caught up.</div>`}</div>
+ <div class="card"><h3>Inactive prospects<span class="sp">no touch in 30+ days</span></h3>
+ ${inactive.map(a=>`<div class="item"><div class="tx"><a class="l" data-acct="${a.id}"><b>${esc(a.n)}</b></a><div class="muted">${a.own} · last contact ${a.last} days ago</div></div><button class="btn" data-mktask="${a.id}">Create task</button></div>`).join("")||`<div class="muted">None.</div>`}</div></div></div>`;
+}
+function oppRows(f){
+ let rows=OPPS.filter(o=>(f.office==="All"||repOffice(o.own)===f.office)&&(f.stage==="All"||(f.stage==="Open"?isOpen(o):f.stage==="Stalled"?stalled(o):f.stage==="Closed"?!isOpen(o):o.st===f.stage)));
+ const cmp={rev:(a,b)=>b.rev-a.rev,close:(a,b)=>a.close-b.close,gp:(a,b)=>b.rev*b.gp-a.rev*a.gp,ins:(a,b)=>b.ins-a.ins}[f.sort];
+ return rows.slice().sort(cmp);
+}
+function viewPipeline(){
+ const f=S.pipe,rows=oppRows(f);
+ const scope=OPPS.filter(o=>f.office==="All"||repOffice(o.own)===f.office);
+ const open=scope.filter(isOpen),won=scope.filter(o=>o.st==="Won"),lost=scope.filter(o=>o.st==="Lost");
+ const sum=(a,k)=>a.reduce((s,o)=>s+(k?k(o):o.rev),0);
+ const w=sum(open,o=>o.rev*PROB[o.st]),gp=sum(open,o=>o.rev*o.gp/100);
+ const wr=won.length+lost.length?Math.round(won.length/(won.length+lost.length)*100):0;
+ const byStage=STAGES.slice(0,5).map(s=>({s,v:sum(open.filter(o=>o.st===s))}));const mx=Math.max(1,...byStage.map(x=>x.v));
+ const months=[0,1,2,3].map(i=>{const d=new Date();d.setMonth(d.getMonth()+i);return{l:d.toLocaleDateString("en-US",{month:"short"}),v:0,m:(d.getMonth()),y:d.getFullYear()}});
+ open.forEach(o=>{const d=day(o.close);const m=months.find(x=>x.m===d.getMonth()&&x.y===d.getFullYear());if(m)m.v+=o.rev*PROB[o.st]});const mm=Math.max(1,...months.map(m=>m.v));
+ const rfps=scope.filter(o=>o.ty==="RFP"),quotes=scope.filter(o=>o.ty==="Quote");
+ return `<h2>Pipeline &amp; Opportunity Management</h2><div class="sub">One pipeline across every rep, manager and office: stages, revenue, GP, next steps, and stalled deals.</div>
+ <div class="bar"><select data-f="pipe.office"><option>All</option>${Object.keys(OFFICES).map(o=>`<option ${f.office===o?"selected":""}>${o}</option>`).join("")}</select>
+ ${["All","Open","RFP Issued","Quote Submitted","Negotiation","Stalled","Won","Lost"].map(s=>`<span class="chip ${f.stage===s?"on":""}" data-chip="pipe.stage:${s}">${s}</span>`).join("")}
+ <span style="margin-left:auto" class="muted">Sort</span><select data-f="pipe.sort"><option value="rev" ${f.sort==="rev"?"selected":""}>Revenue</option><option value="gp" ${f.sort==="gp"?"selected":""}>Gross profit</option><option value="close" ${f.sort==="close"?"selected":""}>Close date</option><option value="ins" ${f.sort==="ins"?"selected":""}>Days in stage</option></select></div>
+ <div class="kpis"><div class="kpi"><div class="l">Open pipeline</div><div class="v">${money(sum(open))}</div><div class="d muted">${open.length} opportunities</div></div>
+ <div class="kpi"><div class="l">Weighted forecast</div><div class="v">${money(w)}</div></div>
+ <div class="kpi"><div class="l">Projected GP (open)</div><div class="v">${money(gp)}</div></div>
+ <div class="kpi"><div class="l">Win rate (closed)</div><div class="v">${wr}%</div><div class="d muted">${won.length} won · ${lost.length} lost</div></div>
+ <div class="kpi"><div class="l">Stalled (21+ days)</div><div class="v ${open.filter(stalled).length?"bad":""}">${open.filter(stalled).length}</div></div></div>
+ <div class="grid g2"><div class="card"><h3>Opportunities<span class="sp">${rows.length} · click a row for detail</span></h3>
+ <div style="overflow:auto"><table><tr><th>Opportunity</th><th>Owner</th><th>Type</th><th>Stage</th><th class="num">Annual rev</th><th class="num">GP</th><th>Close</th><th>Next step</th></tr>
+ ${rows.map(o=>`<tr class="row" data-opp="${o.id}"><td><b>${esc(o.n)}</b><div class="muted">${esc(acct(o.a).n)}</div></td><td>${o.own}<div class="muted">${repOffice(o.own)}</div></td><td>${o.ty}</td><td><span class="st ${sCls(o.st)}">${o.st}</span>${stalled(o)?`<div class="flag">Stalled ${o.ins}d</div>`:""}</td><td class="num">${money(o.rev)}</td><td class="num">${money(o.rev*o.gp/100)}<div class="muted">${o.gp}%</div></td><td>${fdate(o.close)}</td><td>${esc(o.next)}${isOpen(o)?`<div class="${o.nd<0?"flag":"muted"}">${o.nd<0?-o.nd+" days overdue":"due "+fdate(o.nd)}</div>`:""}</td></tr>`).join("")||`<tr><td colspan=8 class="muted">No opportunities match.</td></tr>`}</table></div></div>
+ <div><div class="card" style="margin-bottom:14px"><h3>Pipeline by stage</h3>${byStage.map(x=>`<div class="hb"><span class="n">${x.s}</span><span class="t"><i style="width:${x.v/mx*100}%"></i></span><span class="v">${money(x.v)}</span></div>`).join("")}</div>
+ <div class="card" style="margin-bottom:14px"><h3>Forecast by close month<span class="sp">weighted</span></h3><div class="cols">${months.map(m=>`<div class="c"><i style="height:${m.v/mm*110+4}px"></i>${m.l}<br><b style="color:#181818">${money(m.v)}</b></div>`).join("")}</div></div>
+ <div class="card"><h3>RFPs &amp; quotes</h3>
+ ${[["RFPs in play",rfps.filter(isOpen).length],["Quotes out",quotes.filter(o=>o.st==="Quote Submitted").length+open.filter(o=>o.st==="Quote Submitted"&&o.ty!=="Quote").length],["Wins",won.length],["Losses",lost.length],["Stalled",open.filter(stalled).length]].map(x=>`<div class="row2" style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #F0F0F0"><span>${x[0]}</span><b>${x[1]}</b></div>`).join("")}</div></div></div>`;
+}
+function repStats(n){
+ const mine=OPPS.filter(o=>o.own===n),open=mine.filter(isOpen),won=mine.filter(o=>o.st==="Won"),lost=mine.filter(o=>o.st==="Lost");
+ const cl=won.length+lost.length;
+ return{n,o:repOffice(n),act:actCount(n,30),pipe:open.reduce((s,o)=>s+o.rev,0),w:open.reduce((s,o)=>s+o.rev*PROB[o.st],0),won:won.reduce((s,o)=>s+o.rev,0),wr:cl?Math.round(won.length/cl*100):null,od:open.filter(overdue).length,st:open.filter(stalled).length,opps:mine.length};
+}
+function viewLeadership(){
+ const sc=S.lead.scope;let reps,title;
+ if(sc==="all"){reps=REPS;title="Company"}else if(sc.startsWith("o:")){reps=REPS.filter(r=>r.o===sc.slice(2));title=sc.slice(2)+" office · manager "+OFFICES[sc.slice(2)]}else{reps=REPS.filter(r=>r.n===sc.slice(2));title=sc.slice(2)}
+ const st=reps.map(r=>repStats(r.n));const T=k=>st.reduce((s,r)=>s+r[k],0);
+ const teamAvg=REPS.reduce((s,r)=>s+actCount(r.n,30),0)/REPS.length;
+ const closed=OPPS.filter(o=>reps.find(r=>r.n===o.own)&&!isOpen(o)),wonN=closed.filter(o=>o.st==="Won").length;
+ const wr=closed.length?Math.round(wonN/closed.length*100):0;
+ const opps=OPPS.filter(o=>reps.find(r=>r.n===o.own)),conv=opps.length?Math.round(opps.filter(o=>["Quote Submitted","Negotiation","Won"].includes(o.st)).length/opps.length*100):0;
+ let rows;
+ if(sc==="all")rows=Object.keys(OFFICES).map(o=>{const s=REPS.filter(r=>r.o===o).map(r=>repStats(r.n));const sm=k=>s.reduce((a,r)=>a+r[k],0);return{n:o+" · "+OFFICES[o],act:sm("act"),pipe:sm("pipe"),w:sm("w"),won:sm("won"),od:sm("od"),st:sm("st"),key:"o:"+o}});
+ else rows=st.map(r=>({...r,key:"r:"+r.n}));
+ const coach=[];
+ st.forEach(r=>{
+  if(r.act<teamAvg*.5)coach.push({n:r.n,h:`${r.n}: activity is ${Math.round(r.act/teamAvg*100)}% of the team average`,b:`${r.act} touches in 30 days vs ${Math.round(teamAvg)} team average. Review the call plan and block time for prospecting.`});
+  if(r.od>=2)coach.push({n:r.n,h:`${r.n}: ${r.od} follow-ups are overdue`,b:"Walk the next steps together and set dates the system will remind them about."});
+  if(r.st>=2)coach.push({n:r.n,h:`${r.n}: ${r.st} stalled opportunities`,b:"Pick the two with the largest revenue and plan the next move or close them out."});
+  if(r.wr!==null&&r.wr<40)coach.push({n:r.n,h:`${r.n}: ${r.wr}% win rate on closed deals`,b:"Review recent losses for pricing or response-time patterns."});
+ });
+ const mx=Math.max(1,...rows.map(r=>r.act));
+ return `<h2>Leadership Visibility &amp; Coaching</h2><div class="sub">Dashboards by company, office, manager and rep. Pick a view to see how activity turns into pipeline.</div>
+ <div class="bar"><span class="muted">View</span><select data-f="lead.scope"><option value="all" ${sc==="all"?"selected":""}>Company</option>
+ <optgroup label="Office / manager">${Object.keys(OFFICES).map(o=>`<option value="o:${o}" ${sc==="o:"+o?"selected":""}>${o} · ${OFFICES[o]}</option>`).join("")}</optgroup>
+ <optgroup label="Rep">${REPS.map(r=>`<option value="r:${r.n}" ${sc==="r:"+r.n?"selected":""}>${r.n}</option>`).join("")}</optgroup></select><b style="margin-left:6px">${esc(title)}</b></div>
+ <div class="kpis"><div class="kpi"><div class="l">Activities (30d)</div><div class="v">${T("act")}</div></div>
+ <div class="kpi"><div class="l">Open pipeline</div><div class="v">${money(T("pipe"))}</div></div>
+ <div class="kpi"><div class="l">Weighted forecast</div><div class="v">${money(T("w"))}</div></div>
+ <div class="kpi"><div class="l">Closed won</div><div class="v">${money(T("won"))}</div></div>
+ <div class="kpi"><div class="l">Win rate</div><div class="v">${wr}%</div></div>
+ <div class="kpi"><div class="l">Quote-to-win conversion</div><div class="v">${conv}%</div><div class="d muted">opps reaching quote or later</div></div></div>
+ <div class="grid g2"><div class="card"><h3>${sc==="all"?"By office":sc.startsWith("o:")?"By rep":"Rep detail"}</h3>
+ <table><tr><th>${sc==="all"?"Office / manager":"Rep"}</th><th class="num">Activities</th><th class="num">Open pipeline</th><th class="num">Weighted</th><th class="num">Won</th><th class="num">Overdue</th><th class="num">Stalled</th></tr>
+ ${rows.map(r=>`<tr class="row" data-scope="${r.key}"><td><b>${esc(r.n)}</b></td><td class="num">${r.act}</td><td class="num">${money(r.pipe)}</td><td class="num">${money(r.w)}</td><td class="num">${money(r.won)}</td><td class="num ${r.od?"bad":""}">${r.od}</td><td class="num ${r.st?"bad":""}">${r.st}</td></tr>`).join("")}</table>
+ <div style="margin-top:14px"><h3 style="margin-bottom:6px">Activity vs pipeline</h3>${rows.map(r=>`<div class="hb"><span class="n" title="${esc(r.n)}">${esc(r.n.split(" · ")[0])}</span><span class="t"><i style="width:${r.act/mx*100}%"></i></span><span class="v">${r.act}</span></div>`).join("")}</div></div>
+ <div class="card"><h3>Coaching opportunities<span class="sp">${coach.length} flagged</span></h3>
+ ${coach.map(c=>`<div class="coach"><b>${esc(c.h)}</b>${esc(c.b)}<div style="margin-top:6px"><button class="btn" data-sched="${esc(c.n)}">Schedule 1:1</button></div></div>`).join("")||`<div class="muted">No flags for this view. Nice work.</div>`}</div></div>`;
+}
+function viewAccounts(){
+ const f=S.acc;
+ let rows=ACCTS.filter(a=>(f.f==="All"||(f.f==="Customers"?a.type==="Customer":f.f==="Prospects"?a.type==="Prospect":a.st===f.f))&&(!f.q||a.n.toLowerCase().includes(f.q.toLowerCase())));
+ const cust=ACCTS.filter(a=>a.type==="Customer");
+ const ret=Math.round(cust.filter(a=>a.st!=="Inactive").length/cust.length*100);
+ const rfp=ACCTS.filter(a=>a.rfp!==null&&a.rfp<=60);
+ return `<h2>Customer &amp; Account Management</h2><div class="sub">Owners, contacts, communication history, expansion ideas, retention and upcoming RFPs.</div>
+ <div class="kpis"><div class="kpi"><div class="l">Customers</div><div class="v">${cust.length}</div></div><div class="kpi"><div class="l">Customer retention (active)</div><div class="v">${ret}%</div></div>
+ <div class="kpi"><div class="l">At risk</div><div class="v warn">${ACCTS.filter(a=>a.st==="At risk").length}</div></div><div class="kpi"><div class="l">Inactive accounts</div><div class="v bad">${ACCTS.filter(a=>a.st==="Inactive").length}</div></div>
+ <div class="kpi"><div class="l">RFPs due in 60 days</div><div class="v">${rfp.length}</div></div></div>
+ <div class="bar"><input type="text" placeholder="Search accounts" value="${esc(f.q)}" id="accq" style="min-width:220px">${["All","Customers","Prospects","At risk","Inactive"].map(x=>`<span class="chip ${f.f===x?"on":""}" data-chip="acc.f:${x}">${x}</span>`).join("")}</div>
+ <div class="grid g2"><div class="card"><h3>Accounts<span class="sp">${rows.length}</span></h3><div style="overflow:auto"><table><tr><th>Account</th><th>Owner</th><th>Status</th><th class="num">Annual rev</th><th>Last contact</th><th>Next RFP</th>${S.tms?`<th class="num">Shipments/mo</th><th class="num">GP</th>`:""}</tr>
+ ${rows.map(a=>`<tr class="row" data-acct="${a.id}"><td><b>${esc(a.n)}</b><div class="muted">${a.ind}</div></td><td>${a.own}<div class="muted">${repOffice(a.own)}</div></td><td><span class="st s-${a.st==="At risk"?"At":a.st}">${a.st}</span></td><td class="num">${money(a.rev)}</td><td class="${a.last>30?"flag":""}">${a.last} days ago</td><td>${a.rfp!==null?fdate(a.rfp):"None"}</td>${S.tms?`<td class="num">${a.ship||"–"}</td><td class="num">${a.type==="Customer"?a.gp+"%":"–"}</td>`:""}</tr>`).join("")}</table></div></div>
+ <div><div class="card" style="margin-bottom:14px"><h3>Upcoming RFPs</h3>${rfp.sort((a,b)=>a.rfp-b.rfp).map(a=>`<div class="item"><div class="tx"><a class="l" data-acct="${a.id}"><b>${esc(a.n)}</b></a><div class="muted">${a.own}</div></div><b>${fdate(a.rfp)}</b></div>`).join("")}</div>
+ <div class="card"><h3>Expansion ideas</h3>${cust.filter(a=>a.st!=="Inactive").slice(0,6).map(a=>`<div class="item"><div class="tx"><a class="l" data-acct="${a.id}"><b>${esc(a.n)}</b></a><div class="muted">${a.exp.join(" · ")}</div></div></div>`).join("")}</div></div></div>`;
+}
+const RULES=[
+ {id:"r1",n:"Follow-up task 3 days after a quote is submitted",d:"Creates a task for the opportunity owner so no quote goes quiet.",run:()=>OPPS.filter(o=>o.st==="Quote Submitted").map(o=>({to:o.own,txt:`Task created: follow up on "${o.n}"`}))},
+ {id:"r2",n:"Flag opportunities stalled 21+ days in a stage",d:"Notifies the owner and their manager and adds a flag to the record.",run:()=>OPPS.filter(stalled).map(o=>({to:OFFICES[repOffice(o.own)],txt:`${o.own}'s "${o.n}" has been in ${o.st} for ${o.ins} days`}))},
+ {id:"r3",n:"Alert when a customer has no contact in 30 days",d:"Pings the account owner and creates a check-in task.",run:()=>ACCTS.filter(a=>a.type==="Customer"&&a.last>30).map(a=>({to:a.own,txt:`No contact with ${a.n} in ${a.last} days. Check-in task created.`}))},
+ {id:"r4",n:"RFP reminder 30 days before the due date",d:"Reminds the owner and manager to start the response early.",run:()=>ACCTS.filter(a=>a.rfp!==null&&a.rfp<=30).map(a=>({to:a.own,txt:`${a.n} RFP is due ${fdate(a.rfp)}. Start the response.`}))},
+ {id:"r5",n:"Weekly leadership digest, Mondays 7:00 AM",d:"Emails managers and posts to Teams: activity, pipeline, stalled deals, coaching flags.",run:()=>{const o=OPPS.filter(isOpen);return[{to:"All managers",txt:`Digest: ${ACT.filter(a=>a.d<7).length} activities this week, ${money(o.reduce((s,x)=>s+x.rev,0))} open pipeline, ${o.filter(stalled).length} stalled, ${o.filter(overdue).length} overdue next steps`}]}}
+];
+RULES.forEach(r=>S.rules[r.id]=true);
+function tmsSeries(a){const r=rng(a.id*7);const base=a.ship||60;return[...Array(6)].map((_,i)=>{const sh=Math.round(base*(.8+r()*.4));const rev=Math.round(a.rev/12*(.85+r()*.3));return{m:new Date(2026,5+i,1).toLocaleDateString("en-US",{month:"short"}),sh,rev,gp:Math.round(rev*(a.gp/100)*(.9+r()*.2))}})}
+function viewAutomation(){
+ const a=acct(S.tmsAcct),ser=tmsSeries(a),mx=Math.max(...ser.map(s=>s.rev));
+ return `<h2>Automation &amp; Integration</h2><div class="sub">Follow-ups and reporting that run on their own, connected to the tools the team already uses.</div>
+ <div class="grid g2"><div class="card"><h3>Automation rules<span class="sp">toggle, then Run now to preview</span></h3>
+ ${RULES.map(r=>`<div class="item"><div class="toggle ${S.rules[r.id]?"on":""}" data-rule="${r.id}"><i></i></div><div class="tx"><b>${r.n}</b><div class="muted">${r.d}</div></div><button class="btn" data-run="${r.id}">Run now</button></div>`).join("")}
+ <h3 style="margin-top:16px">Run log &amp; Teams preview</h3>
+ ${S.log.length?S.log.slice(0,8).map(l=>`<div class="teams"><div class="h">Teams · #sales-alerts · to ${esc(l.to)}</div>${esc(l.txt)}</div>`).join(""):`<div class="muted">Run a rule to see the tasks and Teams alerts it would send.</div>`}</div>
+ <div><div class="card" style="margin-bottom:14px"><h3>Integrations</h3>
+ <div class="integ item"><div class="ic" style="background:#0F6CBD">O</div><div class="tx"><b>Outlook</b><div class="muted">Log emails and meetings to the right account and contact. Calendar sync keeps the timeline current.</div></div><span class="pillc s-Active">Standard</span></div>
+ <div class="integ item"><div class="ic" style="background:#5059C9">T</div><div class="tx"><b>Teams</b><div class="muted">Alerts and daily digests in channels. Look up records without leaving Teams.</div></div><span class="pillc s-Active">Standard</span></div>
+ <div class="integ item"><div class="ic" style="background:#DD7A01">TM</div><div class="tx"><b>Transportation management system</b><div class="muted">Shipment volume, revenue and GP by account and lane. Scoped with your IT team.</div></div><span class="pillc s-Prospect">To scope</span></div>
+ <div style="margin-top:10px;display:flex;align-items:center;gap:10px"><div class="toggle ${S.tms?"on":""}" data-tms="1"><i></i></div><span>Show sample TMS data in CRM</span></div></div>
+ <div class="card"><h3>What TMS data adds to reports</h3><div class="muted" style="line-height:1.6">Revenue and GP per account next to the activity that earned it. Shipments per month by lane to spot decline early. Win/loss compared to real margin. Pipeline forecast checked against booked volume.</div></div></div></div>
+ ${S.tms?`<div class="card" style="margin-top:14px"><h3>Sample TMS feed<span class="sp"><select data-f="tmsAcct">${ACCTS.filter(x=>x.type==="Customer").map(x=>`<option value="${x.id}" ${x.id===S.tmsAcct?"selected":""}>${esc(x.n)}</option>`).join("")}</select></span></h3>
+ <div class="cols">${ser.map(s=>`<div class="c"><i style="height:${s.rev/mx*110+4}px"></i>${s.m}<br><b style="color:#181818">${money(s.rev)}</b><br>${s.sh} ship · GP ${money(s.gp)}</div>`).join("")}</div></div>`:""}`;
+}
+/* ---------- render + events ---------- */
+function render(){
+ const v={activity:viewActivity,pipeline:viewPipeline,leadership:viewLeadership,accounts:viewAccounts,automation:viewAutomation}[S.tab];
+ const q=$("#accq"),keep=q&&document.activeElement===q;
+ const tb=TABS.find(x=>x.k===S.tab);
+ $("#view").innerHTML=v().replace(/^<h2>(.*?)<\/h2><div class="sub">(.*?)<\/div>/,(m,a,b)=>`<div class="ph"><div class="phi" style="background:${tb.c}">${a.charAt(0)}</div><div><div class="pht">${tb.t}</div><div class="phn">${a}</div></div><div class="phs">${b}</div></div>`);
+ const nq=$("#accq");if(nq){nq.oninput=e=>{S.acc.q=e.target.value;const p=e.target.selectionStart;render();const z=$("#accq");z.focus();z.setSelectionRange(p,p)};if(keep)nq.focus()}
+}
+function openOpp(id){
+ const o=OPPS.find(x=>x.id===id),a=acct(o.a);
+ const next=STAGES[STAGES.indexOf(o.st)+1];
+ $("#drawer").innerHTML=`<span class="x2" data-close="1">&times;</span><h3>${esc(o.n)}</h3><div class="muted" style="margin-bottom:10px"><a class="l" data-acct="${a.id}">${esc(a.n)}</a> · ${o.own}</div>
+ <span class="st ${sCls(o.st)}">${o.st}</span> ${stalled(o)?'<span class="flag">Stalled</span>':""}
+ <div style="margin-top:10px">${[["Type",o.ty],["Annual revenue",money(o.rev)],["Gross profit",money(o.rev*o.gp/100)+" ("+o.gp+"%)"],["Expected close",fdate(o.close)],["Days in stage",o.ins],["Next step",o.next],["Next step due",o.nd<0?-o.nd+" days overdue":fdate(o.nd)],["Office",repOffice(o.own)+" · "+OFFICES[repOffice(o.own)]]].map(r=>`<div class="row2"><span class="muted">${r[0]}</span><b>${esc(r[1])}</b></div>`).join("")}</div>
+ <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${isOpen(o)&&next&&next!=="Lost"?`<button class="btn p" data-adv="${o.id}">Advance to ${next}</button>`:""}${isOpen(o)?`<button class="btn" data-lose="${o.id}">Mark lost</button>`:""}<button class="btn" data-openacct="${a.id}">Open account</button></div>`;
+ $("#drawer").classList.add("open");
+}
+function openAcct(id){
+ const a=acct(id),h=ACT.filter(x=>x.a===id).slice(0,8),opps=OPPS.filter(o=>o.a===id);
+ $("#drawer").innerHTML=`<span class="x2" data-close="1">&times;</span><h3>${esc(a.n)}</h3><div class="muted" style="margin-bottom:8px">${a.ind} · <span class="st s-${a.st==="At risk"?"At":a.st}">${a.st}</span></div>
+ ${[["Account owner",a.own+" · "+repOffice(a.own)],["Manager",OFFICES[repOffice(a.own)]],["Annual revenue",money(a.rev)],["GP",a.type==="Customer"?a.gp+"%":"n/a"],["Last contact",a.last+" days ago"],["Next RFP",a.rfp!==null?fdate(a.rfp):"None"]].map(r=>`<div class="row2"><span class="muted">${r[0]}</span><b>${esc(r[1])}</b></div>`).join("")}
+ <div style="margin:10px 0"><span class="muted">Reassign owner</span><br><select data-reassign="${a.id}" style="width:100%;margin-top:4px">${REPS.map(r=>`<option ${r.n===a.own?"selected":""}>${r.n}</option>`).join("")}</select></div>
+ <h3 style="font-size:14px;margin-top:14px">Contacts</h3>${a.ct.map(c=>`<div class="item">${esc(c)}</div>`).join("")}
+ <h3 style="font-size:14px;margin-top:14px">Expansion ideas</h3><div class="muted">${a.exp.join(" · ")}</div>
+ <h3 style="font-size:14px;margin-top:14px">Open opportunities</h3>${opps.filter(isOpen).map(o=>`<div class="item"><div class="tx"><a class="l" data-opp="${o.id}">${esc(o.n)}</a><div class="muted">${o.st} · ${money(o.rev)}</div></div></div>`).join("")||'<div class="muted">None</div>'}
+ <h3 style="font-size:14px;margin-top:14px">Communication history</h3>${h.map(x=>`<div class="item"><div class="ic" style="background:${TIC[x.t][0]}">${TIC[x.t][1]}</div><div class="tx"><b>${x.s}</b><div class="muted">${x.rep} · ${x.d===0?"Today":x.d+" days ago"} · ${x.o}</div></div></div>`).join("")||'<div class="muted">No activity in the last 30 days.</div>'}
+ <div style="margin-top:14px"><button class="btn p" data-act="logcall" data-pre="${a.id}">+ Log activity</button></div>`;
+ $("#drawer").classList.add("open");
+}
+function logModal(pre){
+ $("#modal").innerHTML=`<h3 style="margin:0 0 6px">Log activity</h3><label>Account</label><select id="m_a">${ACCTS.map(a=>`<option value="${a.id}" ${pre==a.id?"selected":""}>${esc(a.n)}</option>`).join("")}</select>
+ <label>Type</label><select id="m_t"><option>Call</option><option>Email</option><option>Meeting</option></select><label>Subject</label><input id="m_s" type="text" value="Check-in call">
+ <div style="margin-top:14px;display:flex;gap:8px;justify-content:flex-end"><button class="btn" data-close="1">Cancel</button><button class="btn p" id="m_ok">Save</button></div>`;
+ $("#modalbg").classList.add("on");
+ $("#m_ok").onclick=()=>{const a=acct(+$("#m_a").value);ACT.unshift({d:0,rep:a.own,a:a.id,t:$("#m_t").value,s:$("#m_s").value||"Activity",o:"Logged just now"});a.last=0;if(a.st==="Inactive"||a.st==="At risk"){}$("#modalbg").classList.remove("on");toast("Logged. Last contact on "+a.n+" is now today.");render();if($("#drawer").classList.contains("open"))openAcct(a.id)};
+}
+document.addEventListener("click",e=>{
+ const t=e.target;const q=a=>t.closest("["+a+"]");let el;
+ if(el=q("data-tab"))return go(el.dataset.tab);
+ if(el=q("data-chip")){const[k,v]=el.dataset.chip.split(":");const[g,p]=k.split(".");S[g][p]=v;return render()}
+ if(el=q("data-acct")){go("accounts");openAcct(+el.dataset.acct);return}
+ if(el=q("data-openacct")){openAcct(+el.dataset.openacct);return}
+ if(el=q("data-opp")){if(S.tab!=="pipeline"&&!t.closest("#drawer"))go("pipeline");openOpp(+el.dataset.opp);return}
+ if(el=q("data-scope")){const k=el.dataset.scope;S.lead.scope=k.startsWith("o:")?k:k;return render()}
+ if(el=q("data-done")){S.doneTasks[el.dataset.done]=true;toast("Marked complete");return render()}
+ if(el=q("data-mktask")){const a=acct(+el.dataset.mktask);S.extraTasks.push({id:"x"+a.id,txt:"Re-engage "+a.n,acct:a.n,aid:a.id,own:a.own,days:0});toast("Task created for "+a.own);return render()}
+ if(el=q("data-sched")){return toast("1:1 invite drafted for "+el.dataset.sched)}
+ if(el=q("data-act")){return logModal(el.dataset.pre)}
+ if(el=q("data-adv")){const o=OPPS.find(x=>x.id===+el.dataset.adv);o.st=STAGES[STAGES.indexOf(o.st)+1];o.ins=0;toast("Advanced to "+o.st);render();return openOpp(o.id)}
+ if(el=q("data-lose")){const o=OPPS.find(x=>x.id===+el.dataset.lose);o.st="Lost";toast("Marked lost");render();return openOpp(o.id)}
+ if(el=q("data-rule")){S.rules[el.dataset.rule]=!S.rules[el.dataset.rule];return render()}
+ if(el=q("data-run")){const r=RULES.find(x=>x.id===el.dataset.run);if(!S.rules[r.id])return toast("Turn the rule on first");const res=r.run();S.log=res.concat(S.log);toast(res.length+" action"+(res.length===1?"":"s")+" from this rule");return render()}
+ if(el=q("data-tms")){S.tms=!S.tms;return render()}
+ if(q("data-close")){$("#drawer").classList.remove("open");$("#modalbg").classList.remove("on");return}
+ if(t.id==="modalbg")$("#modalbg").classList.remove("on");
+});
+document.addEventListener("change",e=>{
+ const t=e.target;
+ if(t.dataset.f){const[g,p]=t.dataset.f.split(".");if(p===undefined)S[g]=+t.value||t.value;else S[g][p]=t.value;render()}
+ if(t.dataset.reassign){const a=acct(+t.dataset.reassign);a.own=t.value;toast("Owner changed to "+t.value);render();openAcct(a.id)}
+});
+$("#share").onclick=()=>{const u=location.href.split("#")[0]+"#"+S.tab;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>toast("Link to this tab copied"),()=>toast("Share this file or its hosted link; add #"+S.tab+" to open this tab"))};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#drawer").classList.remove("open");$("#modalbg").classList.remove("on")}});
+const h=location.hash.slice(1);if(TABS.find(t=>t.k===h))S.tab=h;
+drawChrome();render();
+</script>
+</body>
+</html>
